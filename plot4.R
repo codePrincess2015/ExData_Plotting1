@@ -1,0 +1,23 @@
+data$Global_active_power <- as.numeric(data$Global_active_power)
+data <- read.table("household_power_consumption.txt",header = TRUE, sep = ";")
+data$Date <- paste(data$Date,data$Time)
+data$Time <- NULL
+names(data)[1] <- "datetime"
+data$datetime <- strptime(data$datetime,"%d/%m/%Y %T")
+data <- data[as.Date(data$datetime) >= as.Date("2007-02-01") & as.Date(data$datetime) <= as.Date("2007-02-02"),]
+data$Sub_metering_1 <- as.numeric(as.character(data$Sub_metering_1))
+data$Sub_metering_2 <- as.numeric(as.character(data$Sub_metering_2))
+data$Sub_metering_3 <- as.numeric(as.character(data$Sub_metering_3))
+data$Global_active_power <- as.numeric(as.character(data$Global_active_power))
+data$Voltage<- as.numeric(as.character(data$Voltage))
+data$Global_reactive_power <- as.numeric(as.character(data$Global_reactive_power))
+png(file="plot4.png",width=480,height=480,res=72)
+par(mfrow=c(2,2))
+plot(as.POSIXct(data$datetime),data$Global_active_power, type="l",xlab = "", ylab = "Global Active Power (kilowatts)")
+plot(as.POSIXct(data$datetime),data$Voltage, type="l",xlab = "datetime", ylab = "Voltage")
+plot(as.POSIXct(data$datetime),data$Sub_metering_1, type="l",xlab = "", ylab = "Energy sub metering")
+lines(as.POSIXct(data$datetime),data$Sub_metering_2, type="l", col = "red")
+lines(as.POSIXct(data$datetime),data$Sub_metering_3, type="l", col = "blue")
+legend("topright",lty=1,names(data)[6:8],col=c("black","red","blue"),bty="n")
+plot(as.POSIXct(data$datetime),data$Global_reactive_power, type="l",xlab = "datetime", ylab = "Global_reactive_power")
+dev.off()
