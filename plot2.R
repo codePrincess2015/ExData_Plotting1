@@ -1,4 +1,3 @@
-data$Global_active_power <- as.numeric(data$Global_active_power)
 data <- read.table("household_power_consumption.txt",header = TRUE, sep = ";")
 data$Date <- paste(data$Date,data$Time)
 data$Time <- NULL
